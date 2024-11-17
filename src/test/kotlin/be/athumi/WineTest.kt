@@ -4,6 +4,27 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class WineTest {
+
+    val currentWineShop = currentWineShopData
+    val futureWineShop = futureWineShopData
+
+    @Test
+    fun `Compare new wines values three years in the future`() {
+        repeat(3) {
+            currentWineShop.next()
+        }
+
+        // Loop through currentWineShop and check corresponding futureWineShop values
+        currentWineShop.items.forEach { currentWine ->
+            val futureWine = futureWineShop.items.find { it.name == currentWine.name }
+            assertThat(futureWine).isNotNull
+
+            assertThat(currentWine.name).isEqualTo(futureWine?.name)
+            assertThat(currentWine.price).isEqualTo(futureWine?.price)
+            assertThat(currentWine.expiresInYears).isEqualTo(futureWine?.expiresInYears)
+        }
+    }
+	
     @Test
     fun `tasting or testing wine`() {
         assertThat(Wine("name", 0, 0)).isNotNull
