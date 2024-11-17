@@ -26,6 +26,6 @@ val futureWineShopData = WineShop(
         Wine(name = "Event Wine 1", price = 23, expiresInYears = 12),
         Wine(name = "Event Wine 2", price = 52, expiresInYears = 7),
         Wine(name = "Event Wine 3", price = 55, expiresInYears = 2),
-        Wine(name = "Eco Brilliant Wine", price = 3, expiresInYears = 0)
+        Wine(name = "Eco Brilliant Wine", price = 0, expiresInYears = 0)
     )
 )

@@ -11,7 +11,7 @@ class WineShop(var wines: List<Wine>) {
     }
 
     private fun updatePrice(wine: Wine) {
-        // cellar or aging wine prices increases in time
+        // cellar or aging wine prices increases in time, any other decreases
         if (!wine.isConservato() && !wine.isEvent()) {
             decreasePrice(wine)
         } else {
@@ -28,14 +28,12 @@ class WineShop(var wines: List<Wine>) {
                 wine.expiresInYears < 8 && wine.price < 100 -> wine.price += 1
             }
         }
-
     }
 
     private fun decreasePrice(wine: Wine) {
         if (wine.price > 0) {
-            if (!wine.isAlexanderTheGreatWine()) {
-                wine.price -= 1
-            }
+            when {!wine.isAlexanderTheGreatWine() -> wine.price -= 1 }
+            when {wine.isEcoBrilliantWine() -> wine.price -= 1 } //Eco Brilliant's price degrades twice as fast
         }
     }
 
@@ -74,4 +72,9 @@ class WineShop(var wines: List<Wine>) {
     private fun Wine.isAlexanderTheGreatWine(): Boolean {
         return name == "Wine brewed by Alexander the Great"
     }
+
+    private fun Wine.isEcoBrilliantWine(): Boolean {
+        return name.contains("Eco Brilliant")
+    }
+
 }
