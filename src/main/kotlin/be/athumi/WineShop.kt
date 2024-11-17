@@ -8,19 +8,7 @@ class WineShop(var wines: List<Wine>) {
             if (!wine.isConservato() && !wine.isEvent()) {
                 decreasePrice(wine)
             } else {
-                if (wine.price < 100) {
-                    wine.price += 1
-
-                    if (wine.isEvent()) {
-                        if (wine.expiresInYears < 8) {
-                            increasePrice(wine, 1)
-                        }
-
-                        if (wine.expiresInYears < 3) {
-                            increasePrice(wine, 2)
-                        }
-                    }
-                }
+                increasePrice(wine)
             }
 
             if (!wine.isAlexanderTheGreatWine()) {
@@ -35,7 +23,7 @@ class WineShop(var wines: List<Wine>) {
                         wine.price = 0
                     }
                 } else {
-                    increasePrice(wine, 1)
+                    increasePrice(wine)
                 }
             }
 
@@ -43,10 +31,16 @@ class WineShop(var wines: List<Wine>) {
         }
     }
 
-    private fun increasePrice(wine: Wine, amount: Int) {
-        if (wine.price < 100) {
-            wine.price += amount
+    private fun increasePrice(wine: Wine) {
+        if (wine.price < 100) wine.price += 1
+
+        if (wine.isEvent()) {
+            when {
+                wine.expiresInYears < 3 && wine.price < 100 -> wine.price += 2
+                wine.expiresInYears < 8 && wine.price < 100 -> wine.price += 1
+            }
         }
+
     }
 
     private fun decreasePrice(wine: Wine) {
