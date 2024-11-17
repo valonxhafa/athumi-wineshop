@@ -4,46 +4,47 @@ class WineShop(var wines: List<Wine>) {
     fun next() {
         // Wine Shop logic
         for (wine in wines) {
-            updatePrice(wine)
-            handleExpiration(wine)
             ensurePositivePrices(wine)
             ensurePriceTreshold(wine)
+
+            updatePrice(wine)
+            handleExpiration(wine)
         }
     }
 
     private fun updatePrice(wine: Wine) {
         // cellar or aging wine prices increases in time, any other decreases
-        if (!wine.isConservato() && !wine.isEvent()) {
-            decreasePrice(wine)
-        } else {
+        if (wine.isConservato() || wine.isEvent()) {
             increasePrice(wine)
+        } else {
+            decreasePrice(wine)
         }
     }
 
     private fun increasePrice(wine: Wine) {
-        if (wine.price < 100) {
-            wine.price += 1
+        wine.price += 1
 
-            if (wine.isEvent()) {
-                when {
-                    wine.expiresInYears < 3 -> wine.price += 2
-                    wine.expiresInYears < 8 -> wine.price += 1
-                }
+        if (wine.isEvent()) {
+            when {
+                wine.expiresInYears < 3 -> wine.price += 2
+                wine.expiresInYears < 8 -> wine.price += 1
             }
         }
+
     }
 
     private fun decreasePrice(wine: Wine) {
-        if (wine.price > 0) {
-            when {
-                wine.isAlexanderTheGreatWine() -> Unit
-                wine.isEcoBrilliantWine() -> wine.price -= 2
-                else -> wine.price -= 1 // Standard price decrease for other wines
-            }
+
+        when {
+            wine.isAlexanderTheGreatWine() -> Unit //Can't decrease
+            wine.isEcoBrilliantWine() -> wine.price -= 2 //Decreases twice as fast
+            else -> wine.price -= 1
         }
+
     }
 
     private fun handleExpiration(wine: Wine) {
+        //Default expiration
         if (!wine.isAlexanderTheGreatWine()) {
             wine.expiresInYears -= 1
         }
@@ -54,7 +55,6 @@ class WineShop(var wines: List<Wine>) {
         //Handle the expired wines
         when {
             wine.isConservato() -> increasePrice(wine)
-            wine.isEvent() -> wine.price = 0
             wine.isStandardWine() -> decreasePrice(wine)
         }
     }
