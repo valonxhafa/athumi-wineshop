@@ -31,3 +31,7 @@ extensions.findByName("buildScan")?.withGroovyBuilder {
     setProperty("termsOfServiceUrl", "https://gradle.com/terms-of-service")
     setProperty("termsOfServiceAgree", "yes")
 }
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(13))
+}

@@ -1,62 +1,74 @@
 package be.athumi
 
-class WineShop(var items: List<Wine>) {
+class WineShop(var wines: List<Wine>) {
     fun next() {
         // Wine Shop logic
-        for (i in items.indices) {
-            if (items[i].name != "Bourdeaux Conservato" && items[i].name != "Bourgogne Conservato" && !items[i].name.startsWith("Event")) {
-                if (items[i].price > 0) {
-                    if (items[i].name != "Wine brewed by Alexander the Great") {
-                        items[i].price = items[i].price - 1
+        for (i in wines.indices) {
+            if (!wines[i].isConservato() && !wines[i].isEvent()) {
+                if (wines[i].price > 0) {
+                    if (!wines[i].isAlexanderTheGreatWine()) {
+                        wines[i].price = wines[i].price - 1
                     }
                 }
             } else {
-                if (items[i].price < 100) {
-                    items[i].price = items[i].price + 1
+                if (wines[i].price < 100) {
+                    wines[i].price = wines[i].price + 1
 
-                    if (items[i].name.startsWith("Event")) {
-                        if (items[i].expiresInYears < 8) {
-                            if (items[i].price < 100) {
-                                items[i].price = items[i].price + 1
+                    if (wines[i].isEvent()) {
+                        if (wines[i].expiresInYears < 8) {
+                            if (wines[i].price < 100) {
+                                wines[i].price = wines[i].price + 1
                             }
                         }
 
-                        if (items[i].expiresInYears < 3) {
-                            if (items[i].price < 100) {
-                                items[i].price = items[i].price + 2
+                        if (wines[i].expiresInYears < 3) {
+                            if (wines[i].price < 100) {
+                                wines[i].price = wines[i].price + 2
                             }
                         }
                     }
                 }
             }
 
-            if (items[i].name != "Wine brewed by Alexander the Great") {
-                items[i].expiresInYears = items[i].expiresInYears - 1
-            } else if (items[i].price < 0) {
-                items[i].price = 0
+            if (!wines[i].isAlexanderTheGreatWine()) {
+                wines[i].expiresInYears = wines[i].expiresInYears - 1
+            } else if (wines[i].price < 0) {
+                wines[i].price = 0
             }
 
-            if (items[i].expiresInYears < 0) {
-                if (!items[i].name.contains("Conservato")) {
-                    if (!items[i].name.contains("Event")) {
-                        if (items[i].price > 0) {
-                            if (items[i].name != "Wine brewed by Alexander the Great") {
-                                items[i].price = items[i].price - 1
+            if (wines[i].expiresInYears < 0) {
+                if (!wines[i].isConservato()) {
+                    if (!wines[i].isEvent()) {
+                        if (wines[i].price > 0) {
+                            if (!wines[i].isAlexanderTheGreatWine()) {
+                                wines[i].price = wines[i].price - 1
                             }
                         }
                     } else {
-                        items[i].price = items[i].price - items[i].price
+                        wines[i].price = wines[i].price - wines[i].price
                     }
                 } else {
-                    if (items[i].price < 100) {
-                        items[i].price = items[i].price + 1
+                    if (wines[i].price < 100) {
+                        wines[i].price = wines[i].price + 1
                     }
                 }
             }
 
-            if (items[i].price < 0) {
-                items[i].price = 0
+            if (wines[i].price < 0) {
+                wines[i].price = 0
             }
         }
+    }
+
+    private fun Wine.isConservato(): Boolean {
+        return name == "Bourdeaux Conservato" || name == "Bourgogne Conservato"
+    }
+
+    private fun Wine.isEvent(): Boolean {
+        return name.startsWith("Event")
+    }
+
+    private fun Wine.isAlexanderTheGreatWine(): Boolean {
+        return name == "Wine brewed by Alexander the Great"
     }
 }

@@ -15,9 +15,13 @@ class WineTest {
         }
 
         // Loop through currentWineShop and check corresponding futureWineShop values
-        currentWineShop.items.forEach { currentWine ->
-            val futureWine = futureWineShop.items.find { it.name == currentWine.name }
+        currentWineShop.wines.forEach { currentWine ->
+            val futureWine = futureWineShop.wines.find { it.name == currentWine.name }
             assertThat(futureWine).isNotNull
+
+            println("Comparing wines:")
+            println("Current wine: name=${currentWine.name}, price=${currentWine.price}, expiresInYears=${currentWine.expiresInYears}")
+            println("Future wine:  name=${futureWine?.name}, price=${futureWine?.price}, expiresInYears=${futureWine?.expiresInYears}")
 
             assertThat(currentWine.name).isEqualTo(futureWine?.name)
             assertThat(currentWine.price).isEqualTo(futureWine?.price)
