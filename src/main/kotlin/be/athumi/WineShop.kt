@@ -11,22 +11,7 @@ class WineShop(var wines: List<Wine>) {
                 increasePrice(wine)
             }
 
-            if (!wine.isAlexanderTheGreatWine()) {
-                wine.expiresInYears -= 1
-            }
-
-            if (wine.expiresInYears < 0) {
-                if (!wine.isConservato()) {
-                    if (!wine.isEvent()) {
-                        decreasePrice(wine)
-                    } else {
-                        wine.price = 0
-                    }
-                } else {
-                    increasePrice(wine)
-                }
-            }
-
+            handleExpiration(wine)
             ensurePositivePrices(wine)
         }
     }
@@ -47,6 +32,24 @@ class WineShop(var wines: List<Wine>) {
         if (wine.price > 0) {
             if (!wine.isAlexanderTheGreatWine()) {
                 wine.price -= 1
+            }
+        }
+    }
+
+    private fun handleExpiration(wine: Wine) {
+        if (!wine.isAlexanderTheGreatWine()) {
+            wine.expiresInYears -= 1
+        }
+
+        if (wine.expiresInYears < 0) {
+            if (!wine.isConservato()) {
+                if (!wine.isEvent()) {
+                    decreasePrice(wine)
+                } else {
+                    wine.price = 0
+                }
+            } else {
+                increasePrice(wine)
             }
         }
     }
