@@ -3,59 +3,59 @@ package be.athumi
 class WineShop(var wines: List<Wine>) {
     fun next() {
         // Wine Shop logic
-        for (i in wines.indices) {
-            if (!wines[i].isConservato() && !wines[i].isEvent()) {
-                if (wines[i].price > 0) {
-                    if (!wines[i].isAlexanderTheGreatWine()) {
-                        wines[i].price = wines[i].price - 1
+        for (wine in wines) {
+            if (!wine.isConservato() && !wine.isEvent()) {
+                if (wine.price > 0) {
+                    if (!wine.isAlexanderTheGreatWine()) {
+                        wine.price = wine.price - 1
                     }
                 }
             } else {
-                if (wines[i].price < 100) {
-                    wines[i].price = wines[i].price + 1
+                if (wine.price < 100) {
+                    wine.price = wine.price + 1
 
-                    if (wines[i].isEvent()) {
-                        if (wines[i].expiresInYears < 8) {
-                            if (wines[i].price < 100) {
-                                wines[i].price = wines[i].price + 1
+                    if (wine.isEvent()) {
+                        if (wine.expiresInYears < 8) {
+                            if (wine.price < 100) {
+                                wine.price = wine.price + 1
                             }
                         }
 
-                        if (wines[i].expiresInYears < 3) {
-                            if (wines[i].price < 100) {
-                                wines[i].price = wines[i].price + 2
+                        if (wine.expiresInYears < 3) {
+                            if (wine.price < 100) {
+                                wine.price = wine.price + 2
                             }
                         }
                     }
                 }
             }
 
-            if (!wines[i].isAlexanderTheGreatWine()) {
-                wines[i].expiresInYears = wines[i].expiresInYears - 1
-            } else if (wines[i].price < 0) {
-                wines[i].price = 0
+            if (!wine.isAlexanderTheGreatWine()) {
+                wine.expiresInYears = wine.expiresInYears - 1
+            } else if (wine.price < 0) {
+                wine.price = 0
             }
 
-            if (wines[i].expiresInYears < 0) {
-                if (!wines[i].isConservato()) {
-                    if (!wines[i].isEvent()) {
-                        if (wines[i].price > 0) {
-                            if (!wines[i].isAlexanderTheGreatWine()) {
-                                wines[i].price = wines[i].price - 1
+            if (wine.expiresInYears < 0) {
+                if (!wine.isConservato()) {
+                    if (!wine.isEvent()) {
+                        if (wine.price > 0) {
+                            if (!wine.isAlexanderTheGreatWine()) {
+                                wine.price = wine.price - 1
                             }
                         }
                     } else {
-                        wines[i].price = wines[i].price - wines[i].price
+                        wine.price = wine.price - wine.price
                     }
                 } else {
-                    if (wines[i].price < 100) {
-                        wines[i].price = wines[i].price + 1
+                    if (wine.price < 100) {
+                        wine.price = wine.price + 1
                     }
                 }
             }
 
-            if (wines[i].price < 0) {
-                wines[i].price = 0
+            if (wine.price < 0) {
+                wine.price = 0
             }
         }
     }
