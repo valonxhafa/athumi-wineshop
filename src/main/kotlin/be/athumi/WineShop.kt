@@ -41,16 +41,14 @@ class WineShop(var wines: List<Wine>) {
             wine.expiresInYears -= 1
         }
 
-        if (wine.expiresInYears < 0) {
-            if (!wine.isConservato()) {
-                if (!wine.isEvent()) {
-                    decreasePrice(wine)
-                } else {
-                    wine.price = 0
-                }
-            } else {
-                increasePrice(wine)
-            }
+        //No handling needed if not expired
+        if (wine.expiresInYears >= 0) return
+
+        //Handle the expired wines
+        when {
+            wine.isConservato() -> increasePrice(wine)
+            wine.isEvent() -> wine.price = 0
+            wine.isStandardWine() -> decreasePrice(wine)
         }
     }
 
