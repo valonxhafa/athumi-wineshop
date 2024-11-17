@@ -3,10 +3,10 @@ package be.athumi
 class WineShop(var wines: List<Wine>) {
     fun next() {
         for (wine in wines) {
-            ensurePriceTresholds(wine)
-
             updatePrice(wine)
             handleExpiration(wine)
+
+            ensurePriceTresholds(wine)
         }
     }
 
@@ -21,13 +21,7 @@ class WineShop(var wines: List<Wine>) {
 
     private fun increasePrice(wine: Wine) {
         wine.price += 1
-
-        if (wine.isEvent()) {
-            when {
-                wine.expiresInYears < 3 -> wine.price += 2
-                wine.expiresInYears < 8 -> wine.price += 1
-            }
-        }
+        priceIncreaseForEventWine(wine)
     }
 
     private fun decreasePrice(wine: Wine) {
@@ -59,6 +53,15 @@ class WineShop(var wines: List<Wine>) {
             (wine.price > 100 && !wine.isAlexanderTheGreatWine()) -> 100
             (wine.price < 0) -> 0
             else -> wine.price
+        }
+    }
+
+    private fun priceIncreaseForEventWine(wine: Wine) {
+        if (wine.isEvent()) {
+            when {
+                wine.expiresInYears < 3 -> wine.price += 3
+                wine.expiresInYears < 8 -> wine.price += 1
+            }
         }
     }
 

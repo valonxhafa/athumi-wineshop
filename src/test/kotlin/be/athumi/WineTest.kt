@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test
 
 class WineTest {
 
-    val currentWineShop = currentWineShopData
-    val futureWineShop = futureWineShopData
+    private val currentWineShop = currentWineShopData
+    private val futureWineShop = futureWineShopData
 
     @Test
     fun `Compare new wines values three years in the future`() {
@@ -27,6 +27,62 @@ class WineTest {
             assertThat(currentWine.price).isEqualTo(futureWine?.price)
             assertThat(currentWine.expiresInYears).isEqualTo(futureWine?.expiresInYears)
         }
+    }
+
+    @Test
+    fun `Verify price change for expired standard wines`() {
+        val currentWineShop = WineShop(listOf(Wine(name = "Standard Wine", price = 4, expiresInYears = 2)))
+        val futureWineShop = WineShop(listOf(Wine(name = "Standard Wine", price = 0, expiresInYears = -3)))
+
+        repeat(5) {
+            currentWineShop.next()
+        }
+
+        // Loop through currentWineShop and check corresponding futureWineShop values
+            val currentWine = currentWineShop.wines[0]
+            val futureWine = futureWineShop.wines[0]
+
+            assertThat(currentWine.name).isEqualTo(futureWine.name)
+            assertThat(currentWine.price).isEqualTo(futureWine.price)
+            assertThat(currentWine.expiresInYears).isEqualTo(futureWine.expiresInYears)
+    }
+
+    @Test
+    fun `Verify wine prices when going above wine treshold`() {
+        val currentWineShop = WineShop(listOf(Wine(name = "Event Wine", price = 98, expiresInYears = 5)))
+        val futureWineShop = WineShop(listOf(Wine(name = "Event Wine", price = 100, expiresInYears = 2)))
+
+        repeat(3) {
+            currentWineShop.next()
+        }
+
+        // Loop through currentWineShop and check corresponding futureWineShop values
+        val currentWine = currentWineShop.wines[0]
+        val futureWine = futureWineShop.wines[0]
+
+        assertThat(currentWine.name).isEqualTo(futureWine.name)
+        assertThat(currentWine.price).isEqualTo(futureWine.price)
+        assertThat(currentWine.expiresInYears).isEqualTo(futureWine.expiresInYears)
+    }
+
+    @Test
+    fun `Verify price increase for event wine when expireInYears less than 3`() {
+        val currentWineShop = WineShop(listOf(Wine(name = "Event Wine", price = 20, expiresInYears = 3)))
+        val futureWineShop = WineShop(listOf(Wine(name = "Event Wine", price = 26, expiresInYears = 1)))
+
+        repeat(2) {
+            currentWineShop.next()
+        }
+
+        // Loop through currentWineShop and check corresponding futureWineShop values
+        val currentWine = currentWineShop.wines[0]
+        val futureWine = futureWineShop.wines[0]
+
+        assertThat(futureWine).isNotNull
+
+        assertThat(currentWine.name).isEqualTo(futureWine.name)
+        assertThat(currentWine.price).isEqualTo(futureWine.price)
+        assertThat(currentWine.expiresInYears).isEqualTo(futureWine.expiresInYears)
     }
 	
     @Test
