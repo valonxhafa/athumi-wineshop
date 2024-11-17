@@ -2,10 +2,8 @@ package be.athumi
 
 class WineShop(var wines: List<Wine>) {
     fun next() {
-        // Wine Shop logic
         for (wine in wines) {
-            //No negative prices && no price increase above 100
-            ensurePriceTreshold(wine)
+            ensurePriceTresholds(wine)
 
             updatePrice(wine)
             handleExpiration(wine)
@@ -30,17 +28,14 @@ class WineShop(var wines: List<Wine>) {
                 wine.expiresInYears < 8 -> wine.price += 1
             }
         }
-
     }
 
     private fun decreasePrice(wine: Wine) {
-
         when {
             wine.isAlexanderTheGreatWine() -> Unit //Can't decrease
             wine.isEcoBrilliantWine() -> wine.price -= 2 //Decreases twice as fast
             else -> wine.price -= 1
         }
-
     }
 
     private fun handleExpiration(wine: Wine) {
@@ -59,12 +54,12 @@ class WineShop(var wines: List<Wine>) {
         }
     }
 
-    private fun ensurePriceTreshold(wine: Wine) {
-        if (wine.price > 100 && !wine.isAlexanderTheGreatWine()) {
-            wine.price = 100
+    private fun ensurePriceTresholds(wine: Wine) {
+        wine.price = when {
+            (wine.price > 100 && !wine.isAlexanderTheGreatWine()) -> 100
+            (wine.price < 0) -> 0
+            else -> wine.price
         }
-
-        if (wine.price < 0) wine.price = 0
     }
 
     private fun Wine.isStandardWine() = name.contains("Standard")
@@ -72,5 +67,4 @@ class WineShop(var wines: List<Wine>) {
     private fun Wine.isEvent() = name.startsWith("Event")
     private fun Wine.isAlexanderTheGreatWine() = name.contains("Wine brewed by Alexander the Great")
     private fun Wine.isEcoBrilliantWine() = name.contains("Eco Brilliant")
-
 }
