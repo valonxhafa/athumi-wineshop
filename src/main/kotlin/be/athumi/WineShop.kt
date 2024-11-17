@@ -7,23 +7,23 @@ class WineShop(var wines: List<Wine>) {
             if (!wine.isConservato() && !wine.isEvent()) {
                 if (wine.price > 0) {
                     if (!wine.isAlexanderTheGreatWine()) {
-                        wine.price = wine.price - 1
+                        wine.price -= 1
                     }
                 }
             } else {
                 if (wine.price < 100) {
-                    wine.price = wine.price + 1
+                    wine.price += 1
 
                     if (wine.isEvent()) {
                         if (wine.expiresInYears < 8) {
                             if (wine.price < 100) {
-                                wine.price = wine.price + 1
+                                wine.price += 1
                             }
                         }
 
                         if (wine.expiresInYears < 3) {
                             if (wine.price < 100) {
-                                wine.price = wine.price + 2
+                                wine.price += 2
                             }
                         }
                     }
@@ -31,7 +31,7 @@ class WineShop(var wines: List<Wine>) {
             }
 
             if (!wine.isAlexanderTheGreatWine()) {
-                wine.expiresInYears = wine.expiresInYears - 1
+                wine.expiresInYears -= 1
             }
 
             if (wine.expiresInYears < 0) {
@@ -39,15 +39,15 @@ class WineShop(var wines: List<Wine>) {
                     if (!wine.isEvent()) {
                         if (wine.price > 0) {
                             if (!wine.isAlexanderTheGreatWine()) {
-                                wine.price = wine.price - 1
+                                wine.price -= 1
                             }
                         }
                     } else {
-                        wine.price = wine.price - wine.price
+                        wine.price = 0
                     }
                 } else {
                     if (wine.price < 100) {
-                        wine.price = wine.price + 1
+                        wine.price += 1
                     }
                 }
             }
