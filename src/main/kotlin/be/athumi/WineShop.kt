@@ -32,8 +32,6 @@ class WineShop(var wines: List<Wine>) {
 
             if (!wine.isAlexanderTheGreatWine()) {
                 wine.expiresInYears = wine.expiresInYears - 1
-            } else if (wine.price < 0) {
-                wine.price = 0
             }
 
             if (wine.expiresInYears < 0) {
@@ -54,14 +52,16 @@ class WineShop(var wines: List<Wine>) {
                 }
             }
 
-            if (wine.price < 0) {
-                wine.price = 0
-            }
+            ensurePositivePrices(wine)
         }
     }
 
+    private fun ensurePositivePrices(wine: Wine) {
+        if (wine.price < 0) wine.price = 0
+    }
+
     private fun Wine.isConservato(): Boolean {
-        return name == "Bourdeaux Conservato" || name == "Bourgogne Conservato"
+        return name.contains("Conservato")
     }
 
     private fun Wine.isEvent(): Boolean {
