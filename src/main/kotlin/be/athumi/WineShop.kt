@@ -4,12 +4,9 @@ class WineShop(var wines: List<Wine>) {
     fun next() {
         // Wine Shop logic
         for (wine in wines) {
+
             if (!wine.isConservato() && !wine.isEvent()) {
-                if (wine.price > 0) {
-                    if (!wine.isAlexanderTheGreatWine()) {
-                        wine.price -= 1
-                    }
-                }
+                decreasePrice(wine)
             } else {
                 if (wine.price < 100) {
                     wine.price += 1
@@ -37,11 +34,7 @@ class WineShop(var wines: List<Wine>) {
             if (wine.expiresInYears < 0) {
                 if (!wine.isConservato()) {
                     if (!wine.isEvent()) {
-                        if (wine.price > 0) {
-                            if (!wine.isAlexanderTheGreatWine()) {
-                                wine.price -= 1
-                            }
-                        }
+                        decreasePrice(wine)
                     } else {
                         wine.price = 0
                     }
@@ -56,8 +49,20 @@ class WineShop(var wines: List<Wine>) {
         }
     }
 
+    private fun decreasePrice(wine: Wine) {
+        if (wine.price > 0) {
+            if (!wine.isAlexanderTheGreatWine()) {
+                wine.price -= 1
+            }
+        }
+    }
+
     private fun ensurePositivePrices(wine: Wine) {
         if (wine.price < 0) wine.price = 0
+    }
+
+    private fun Wine.isStandardWine(): Boolean {
+        return !isConservato() && !isEvent() && !isAlexanderTheGreatWine()
     }
 
     private fun Wine.isConservato(): Boolean {
