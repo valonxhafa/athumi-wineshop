@@ -4,15 +4,18 @@ class WineShop(var wines: List<Wine>) {
     fun next() {
         // Wine Shop logic
         for (wine in wines) {
-
-            if (!wine.isConservato() && !wine.isEvent()) {
-                decreasePrice(wine)
-            } else {
-                increasePrice(wine)
-            }
-
+            updatePrice(wine)
             handleExpiration(wine)
             ensurePositivePrices(wine)
+        }
+    }
+
+    private fun updatePrice(wine: Wine) {
+        // cellar or aging wine prices increases in time
+        if (!wine.isConservato() && !wine.isEvent()) {
+            decreasePrice(wine)
+        } else {
+            increasePrice(wine)
         }
     }
 
