@@ -4,7 +4,7 @@ class WineShop(var wines: List<Wine>) {
     fun next() {
         // Wine Shop logic
         for (wine in wines) {
-            ensurePositivePrices(wine)
+            //No negative prices && no price increase above 100
             ensurePriceTreshold(wine)
 
             updatePrice(wine)
@@ -59,14 +59,12 @@ class WineShop(var wines: List<Wine>) {
         }
     }
 
-    private fun ensurePositivePrices(wine: Wine) {
-        if (wine.price < 0) wine.price = 0
-    }
-
     private fun ensurePriceTreshold(wine: Wine) {
         if (wine.price > 100 && !wine.isAlexanderTheGreatWine()) {
             wine.price = 100
         }
+
+        if (wine.price < 0) wine.price = 0
     }
 
     private fun Wine.isStandardWine() = name.contains("Standard")
