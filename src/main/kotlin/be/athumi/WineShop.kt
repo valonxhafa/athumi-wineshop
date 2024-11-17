@@ -7,6 +7,7 @@ class WineShop(var wines: List<Wine>) {
             updatePrice(wine)
             handleExpiration(wine)
             ensurePositivePrices(wine)
+            ensurePriceTreshold(wine)
         }
     }
 
@@ -20,20 +21,25 @@ class WineShop(var wines: List<Wine>) {
     }
 
     private fun increasePrice(wine: Wine) {
-        if (wine.price < 100) wine.price += 1
+        if (wine.price < 100) {
+            wine.price += 1
 
-        if (wine.isEvent()) {
-            when {
-                wine.expiresInYears < 3 && wine.price < 100 -> wine.price += 2
-                wine.expiresInYears < 8 && wine.price < 100 -> wine.price += 1
+            if (wine.isEvent()) {
+                when {
+                    wine.expiresInYears < 3 -> wine.price += 2
+                    wine.expiresInYears < 8 -> wine.price += 1
+                }
             }
         }
     }
 
     private fun decreasePrice(wine: Wine) {
         if (wine.price > 0) {
-            when {!wine.isAlexanderTheGreatWine() -> wine.price -= 1 }
-            when {wine.isEcoBrilliantWine() -> wine.price -= 1 } //Eco Brilliant's price degrades twice as fast
+            when {
+                wine.isAlexanderTheGreatWine() -> Unit
+                wine.isEcoBrilliantWine() -> wine.price -= 2
+                else -> wine.price -= 1 // Standard price decrease for other wines
+            }
         }
     }
 
@@ -57,24 +63,16 @@ class WineShop(var wines: List<Wine>) {
         if (wine.price < 0) wine.price = 0
     }
 
-    private fun Wine.isStandardWine(): Boolean {
-        return !isConservato() && !isEvent() && !isAlexanderTheGreatWine()
+    private fun ensurePriceTreshold(wine: Wine) {
+        if (wine.price > 100 && !wine.isAlexanderTheGreatWine()) {
+            wine.price = 100
+        }
     }
 
-    private fun Wine.isConservato(): Boolean {
-        return name.contains("Conservato")
-    }
-
-    private fun Wine.isEvent(): Boolean {
-        return name.startsWith("Event")
-    }
-
-    private fun Wine.isAlexanderTheGreatWine(): Boolean {
-        return name == "Wine brewed by Alexander the Great"
-    }
-
-    private fun Wine.isEcoBrilliantWine(): Boolean {
-        return name.contains("Eco Brilliant")
-    }
+    private fun Wine.isStandardWine() = name.contains("Standard")
+    private fun Wine.isConservato() = name.contains("Conservato")
+    private fun Wine.isEvent() = name.startsWith("Event")
+    private fun Wine.isAlexanderTheGreatWine() = name.contains("Wine brewed by Alexander the Great")
+    private fun Wine.isEcoBrilliantWine() = name.contains("Eco Brilliant")
 
 }
