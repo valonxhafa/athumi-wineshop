@@ -2,6 +2,7 @@ package be.athumi
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import kotlin.test.Ignore
 
 class WineTest {
 
@@ -81,17 +82,34 @@ class WineTest {
     }
 
     @Test
-    fun `Check that winelist size stays unchanged`() {
+    fun `Check that wines size stays unchanged when there are no eligible event-wines for removal`() {
+
         val initialSize = currentWineShop.wines.size
 
-        repeat(5) {
-            currentWineShop.next()
-        }
+        repeat(2) { currentWineShop.next() } //Lowest expireInYears in dataset is 5, so going down 2 years is safe
 
         val finalSize = currentWineShop.wines.size
 
         assertThat(finalSize).isEqualTo(initialSize)
     }
+
+    @Test
+    fun `Verify event wines are removed from the wines when reaching expiration 0`() {
+        val currentWineShop = WineShop(listOf(
+            Wine(name = "Event Wine", price = 20, expiresInYears = 1),
+            Wine(name = "Event Wine 2", price = 20, expiresInYears = 3),
+            Wine(name = "Event Wine 3", price = 20, expiresInYears = 6),
+            Wine(name = "Standard Wine", price = 4, expiresInYears = 2),
+            Wine(name = "Bourdeaux Conservato", price = 0, expiresInYears = 2)
+        ))
+
+        assertThat(currentWineShop.wines.size).isEqualTo(5)
+
+        repeat(5) { currentWineShop.next() }
+
+        assertThat(currentWineShop.wines.size).isEqualTo(3)
+    }
+
 
     @Test
     fun `tasting or testing wine`() {

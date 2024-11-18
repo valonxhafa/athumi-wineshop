@@ -49,7 +49,18 @@ class WineShop(var wines: List<Wine>) {
 
         //No handling needed if not expired, else update
         if (wine.expiresInYears >= 0) return
-        else updatePrice(wine)
+        else {
+            removeExpiredEventWines(wine)
+            updatePrice(wine)
+        }
+
+    }
+
+    private fun removeExpiredEventWines(wine: Wine) {
+        if(wine.isEvent() && wine.expiresInYears < 0){
+            wine.price = 0
+            wines = wines.filterNot { it == wine }
+        }
     }
 
     private fun ensurePriceThresholds(wine: Wine) {
